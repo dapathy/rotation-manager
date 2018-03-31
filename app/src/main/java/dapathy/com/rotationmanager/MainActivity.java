@@ -69,11 +69,11 @@ public class MainActivity extends AppCompatActivity {
 				boolean isEnabled = Utility.isEnabled(context);
 
 				if (isEnabled) {
-					Utility.unregisterHeadsetReceiver(context);
+					Utility.tryStopService(context);
 					Toast.makeText(context, "Disabled", Toast.LENGTH_SHORT).show();
 				}
 				else {
-					Utility.registerHeadsetReceiver(context);
+					Utility.tryStartService(context);
 					Toast.makeText(context, "Enabled", Toast.LENGTH_SHORT).show();
 				}
 			}

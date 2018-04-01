@@ -1,16 +1,23 @@
 package dapathy.com.rotationmanager;
 
+import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.graphics.PixelFormat;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Surface;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.LinearLayout;
 
 // Headset events cannot be registered in the manifest.
 public class HeadsetStateReceiver extends BroadcastReceiver {
 
 	private static final String TAG = "HeadsetStateReceiver";
+	private LinearLayout orientationChanger;
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -31,18 +38,18 @@ public class HeadsetStateReceiver extends BroadcastReceiver {
 	}
 
 	private void rotateScreen(Context context) {
-		// Disable accelerator rotation
-		Settings.System.putInt(context.getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, 0);
+		orientationChanger = new LinearLayout(context);
+		WindowManager.LayoutParams orientationLayout = new WindowManager.LayoutParams(WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY, 0, PixelFormat.RGBA_8888);
 
-		// Reverse portrait.
-		Settings.System.putInt(context.getContentResolver(), Settings.System.USER_ROTATION, Surface.ROTATION_180);
+		orientationLayout.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT;
+		WindowManager windowManager = (WindowManager) context.getSystemService(Service.WINDOW_SERVICE);
+		windowManager.addView(orientationChanger, orientationLayout);
+		orientationChanger.setVisibility(View.VISIBLE);
 	}
 
 	public void revert(Context context) {
-		// Enable accelerator rotation
-		Settings.System.putInt(context.getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, 1);
-
-		// Reverse portrait.
-		Settings.System.putInt(context.getContentResolver(), Settings.System.USER_ROTATION, Surface.ROTATION_0);
+		if (orientationChanger == null) return;
+		WindowManager windowManager = (WindowManager) context.getSystemService(Service.WINDOW_SERVICE);
+		windowManager.removeView(orientationChanger);
 	}
 }

@@ -1,2 +1,7 @@
 # rotation-manager
-Android app to manage screen rotation.
+
+## Description
+Toggles screen rotation upon plugging / unplugging a headset into an Android device.
+
+## Built with
+- Android

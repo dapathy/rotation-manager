@@ -38,7 +38,7 @@ public class HeadsetStateReceiver extends BroadcastReceiver {
 		Settings.System.putInt(context.getContentResolver(), Settings.System.USER_ROTATION, Surface.ROTATION_180);
 	}
 
-	private void revert(Context context) {
+	public void revert(Context context) {
 		// Enable accelerator rotation
 		Settings.System.putInt(context.getContentResolver(), Settings.System.ACCELEROMETER_ROTATION, 1);
 

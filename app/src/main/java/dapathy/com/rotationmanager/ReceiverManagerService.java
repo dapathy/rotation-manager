@@ -54,6 +54,7 @@ public class ReceiverManagerService extends Service {
 		setEnabled(false);
 		if (receiver == null) return;
 
+		receiver.revert(this);
 		this.unregisterReceiver(receiver);
 	}
 

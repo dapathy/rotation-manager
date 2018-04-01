@@ -13,9 +13,11 @@ import android.util.Log;
 
 public class Utility {
 
+	public static final String ENABLED = "enabled";
+
 	public static boolean isEnabled(Context context) {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-		return sharedPreferences.getBoolean("ENABLED", false);
+		return sharedPreferences.getBoolean(ENABLED, false);
 	}
 
 	public static void tryStartService(Context context) {

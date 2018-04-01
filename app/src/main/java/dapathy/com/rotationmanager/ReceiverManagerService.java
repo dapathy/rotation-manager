@@ -10,10 +10,9 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 public class ReceiverManagerService extends Service {
-	private static final String ENABLED = "enabled";
 	private static final String TAG = "MANAGER";
 
-	private static HeadsetStateReceiver receiver;
+	private HeadsetStateReceiver receiver;
 
 	@Nullable
 	@Override
@@ -61,7 +60,7 @@ public class ReceiverManagerService extends Service {
 	private void setEnabled(boolean value) {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 		SharedPreferences.Editor editor = sharedPreferences.edit();
-		editor.putBoolean(ENABLED, value);
+		editor.putBoolean(Utility.ENABLED, value);
 		editor.apply();
 	}
 }

@@ -25,6 +25,7 @@ public class Utility {
 
 		Intent service = new Intent(context, ReceiverManagerService.class);
 		context.startService(service);
+		setEnabled(context, true);
 	}
 
 	public static void tryStopService(Context context) {
@@ -35,6 +36,7 @@ public class Utility {
 		catch (Exception ignored) {
 
 		}
+		setEnabled(context, false);
 	}
 
 	public static boolean hasSettingPermissions(Context context) {
@@ -48,5 +50,12 @@ public class Utility {
 		if (!hasPermission) Log.d("UTILITY", "No permission");
 
 		return hasPermission;
+	}
+
+	private static void setEnabled(Context context, boolean value) {
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+		SharedPreferences.Editor editor = sharedPreferences.edit();
+		editor.putBoolean(Utility.ENABLED, value);
+		editor.apply();
 	}
 }

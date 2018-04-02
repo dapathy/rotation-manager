@@ -9,12 +9,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,7 +19,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-	private static final int CODE_WRITE_SETTINGS_PERMISSION = 100;
+	private static final int PERMISSION_CODE = 100;
 
 	@Override
 	protected void onStart() {
@@ -85,11 +81,9 @@ public class MainActivity extends AppCompatActivity {
 		if (Utility.hasSettingPermissions(context)) return;
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-			Intent intent = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
-			intent.setData(Uri.parse("package:" + context.getPackageName()));
-			context.startActivityForResult(intent, CODE_WRITE_SETTINGS_PERMISSION);
-		} else {
-			ActivityCompat.requestPermissions(context, new String[]{Manifest.permission.WRITE_SETTINGS}, CODE_WRITE_SETTINGS_PERMISSION);
+			Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+				Uri.parse("package:" + getPackageName()));
+			startActivityForResult(intent, PERMISSION_CODE);
 		}
 	}
 }

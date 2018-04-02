@@ -6,9 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.PixelFormat;
-import android.provider.Settings;
+import android.os.Build;
 import android.util.Log;
-import android.view.Surface;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
@@ -39,9 +38,10 @@ public class HeadsetStateReceiver extends BroadcastReceiver {
 
 	private void rotateScreen(Context context) {
 		orientationChanger = new LinearLayout(context);
-		WindowManager.LayoutParams orientationLayout = new WindowManager.LayoutParams(WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY, 0, PixelFormat.RGBA_8888);
+		int overlay = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY : WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY;
+		WindowManager.LayoutParams orientationLayout = new WindowManager.LayoutParams(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT, overlay, WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, PixelFormat.TRANSLUCENT);
 
-		orientationLayout.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT;
+		orientationLayout.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
 		WindowManager windowManager = (WindowManager) context.getSystemService(Service.WINDOW_SERVICE);
 		windowManager.addView(orientationChanger, orientationLayout);
 		orientationChanger.setVisibility(View.VISIBLE);
@@ -50,6 +50,8 @@ public class HeadsetStateReceiver extends BroadcastReceiver {
 	public void revert(Context context) {
 		if (orientationChanger == null) return;
 		WindowManager windowManager = (WindowManager) context.getSystemService(Service.WINDOW_SERVICE);
+		orientationChanger.setVisibility(View.INVISIBLE);
 		windowManager.removeView(orientationChanger);
+		orientationChanger = null;
 	}
 }

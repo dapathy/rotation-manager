@@ -1,19 +1,15 @@
 package dapathy.com.rotationmanager;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
 
 public class Utility {
 
-	public static final String ENABLED = "enabled";
+	private static final String ENABLED = "enabled";
 
 	public static boolean isEnabled(Context context) {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -40,16 +36,7 @@ public class Utility {
 	}
 
 	public static boolean hasSettingPermissions(Context context) {
-		boolean hasPermission;
-
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-			hasPermission = Settings.System.canWrite(context);
-		else
-			hasPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_SETTINGS) == PackageManager.PERMISSION_GRANTED;
-
-		if (!hasPermission) Log.d("UTILITY", "No permission");
-
-		return hasPermission;
+		return Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(context);
 	}
 
 	private static void setEnabled(Context context, boolean value) {
